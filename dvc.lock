@@ -4,7 +4,7 @@ stages:
     cmd: python src/prepare.py data/data.xml
     deps:
     - path: data/data.xml
-      md5: 5193c4f0e82207a00e6596f679cbdb74
+      md5: 0b95207e9a028fe1b2ed3bac89a8d441
       size: 75783700
     - path: src/prepare.py
       md5: 51549a1c87b182ebdd785704f56ffaf1
@@ -15,14 +15,14 @@ stages:
         prepare.split: 0.2
     outs:
     - path: data/prepared
-      md5: ecb3e4644128e3b3cf72e139ba2365c1.dir
+      md5: c74e878f4c264d4271287e09c323621f.dir
       size: 47722638
       nfiles: 2
   featurize:
     cmd: python src/featurization.py data/prepared data/features
     deps:
     - path: data/prepared
-      md5: ecb3e4644128e3b3cf72e139ba2365c1.dir
+      md5: c74e878f4c264d4271287e09c323621f.dir
       size: 47722638
       nfiles: 2
     - path: src/featurization.py
