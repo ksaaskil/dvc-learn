@@ -2,3 +2,5 @@
 /model.pkl
 .vscode/
 .github/
+__pycache__
+*.pyc
