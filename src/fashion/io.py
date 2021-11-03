@@ -1,20 +1,44 @@
 import os
 import gzip
 
+import dvc.api
 import numpy as np
 from numpy.random import default_rng  # type: ignore
 import tensorflow as tf
 
 VALIDATION_RATIO = 0.20
 
+FASHION_PATH = "data/fashion"
 
-def load_mnist(path, kind="train"):
+
+def data_url() -> str:
+    """ Returns array of files in the directory, such as
+    ```
+    [
+        {"md5": "bef4ecab320f06d8554ea6380940ec79", "relpath": "t10k-images-idx3-ubyte.gz"},
+        {"md5": "bb300cfdad3c16e7a12a480ee83cd310", "relpath": "t10k-labels-idx1-ubyte.gz"},
+        {"md5": "8d4fb7e6c68d591d4c3dfef9ec88bf0d", "relpath": "train-images-idx3-ubyte.gz"},
+        {"md5": "25c81989df183df01b3e8a0aad5dffbe", "relpath": "train-labels-idx1-ubyte.gz"}
+    ]
+    ```
+    """
+    return dvc.api.get_url(path="data/fashion")
+
+
+def resolve_url(path: str) -> str:
+    return dvc.api.get_url(path=path)
+
+
+def load_mnist(kind="train"):
     """
     Load MNIST data from `path`
     https://github.com/zalandoresearch/fashion-mnist/blob/master/utils/mnist_reader.py
     """
-    labels_path = os.path.join(path, "%s-labels-idx1-ubyte.gz" % kind)
-    images_path = os.path.join(path, "%s-images-idx3-ubyte.gz" % kind)
+    labels_path = os.path.join(FASHION_PATH, "%s-labels-idx1-ubyte.gz" % kind)
+    images_path = os.path.join(FASHION_PATH, "%s-images-idx3-ubyte.gz" % kind)
+
+    labels_path = resolve_url(labels_path)
+    images_path = resolve_url(images_path)
 
     with gzip.open(labels_path, "rb") as lbpath:
         labels = np.frombuffer(lbpath.read(), dtype=np.uint8, offset=8)
@@ -28,7 +52,7 @@ def load_mnist(path, kind="train"):
 
 
 def get_training_data(batch_size: int, train_size: int = None):
-    x_train, y_train = load_mnist("data/fashion", kind="train")
+    x_train, y_train = load_mnist(kind="train")
 
     x_train = np.reshape(x_train, [-1, 784]).astype(np.uint8)
     y_train = np.reshape(y_train, [-1, 1]).astype(np.uint8)
@@ -66,7 +90,7 @@ def get_training_data(batch_size: int, train_size: int = None):
 
 
 def get_test_data(batch_size: int):
-    x_test, y_test = load_mnist("data/fashion", kind="t10k")
+    x_test, y_test = load_mnist(kind="t10k")
     test = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(batch_size)
     return test
 
