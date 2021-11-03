@@ -1,2 +1,4 @@
 .python-version
 /model.pkl
+.vscode/
+.github/
