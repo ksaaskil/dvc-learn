@@ -10,7 +10,7 @@ Track data with DVC:
 $ dvc add data/data.xml
 ```
 
-Note how `data/data.xml.dvc` file contains a "reference" to the data. This file should be version-controlled so it can pulled with `dvc pull`.
+Note how `data/data.xml.dvc` file contains a "reference" to the data. This file should be version-controlled so it can be pulled with `dvc pull`.
 
 If you make changes to the data, you should run `dvc add` again to update the reference.
 
