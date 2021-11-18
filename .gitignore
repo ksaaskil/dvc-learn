@@ -1,2 +1,7 @@
 .python-version
 /model.pkl
+.vscode/
+.github/
+__pycache__
+*.pyc
+.DS_Store
